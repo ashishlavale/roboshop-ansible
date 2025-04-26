@@ -1,7 +1,5 @@
 - name: Setup RoboShop Project
   hosts: all
   become: yes
-  vars:
-    app_name: shipping
   roles:
     - "{{ app_name }}"
