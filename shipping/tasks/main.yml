@@ -8,7 +8,15 @@
     name: mysql
     state: latest
 
-# 👉 ADD THIS SECTION HERE
+# 👉 ADD THIS TASK TO INSTALL PyMySQL ON THE MYSQL SERVER
+- name: Install PyMySQL on MySQL server
+  ansible.builtin.dnf:
+    name: python3-PyMySQL
+    state: present
+  become: true
+  delegate_to: mysql-dev.ashishlavale5.online
+
+# 👉 GRANT REMOTE CONNECTIONS TO MYSQL
 - name: Allow remote connections for MySQL root user from shipping server
   community.mysql.mysql_user:
     name: root
@@ -32,7 +40,6 @@
     state: restarted
   become: true
   delegate_to: mysql-dev.ashishlavale5.online
-# 👆 SECTION ENDS HERE
 
 - name: Load to DB
   ansible.builtin.shell: mysql -h mysql-dev.ashishlavale5.online -uroot -pRoboShop@1 < /app/db/{{ item }}.sql
