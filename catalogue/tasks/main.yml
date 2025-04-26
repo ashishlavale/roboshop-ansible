@@ -13,6 +13,16 @@
     name: mongodb-mongosh
     state: latest
 
+- name: Create /app/db directory
+  ansible.builtin.file:
+    path: /app/db
+    state: directory
+
+- name: Copy master-data.js to /app/db
+  ansible.builtin.copy:
+    src: master-data.js
+    dest: /app/db/master-data.js
+
 - name: Load Master Data
   ansible.builtin.shell: mongosh --host mongodb-dev.ashishlavale5.online </app/db/master-data.js
 
