@@ -5,7 +5,7 @@
 
 - name: Install MySQL
   ansible.builtin.dnf:
-    name: mysqld
+    name: mysql-server
     state: latest
 
 #- name: Load Schema
