@@ -24,6 +24,8 @@
     password: RoboShop@1
     priv: '*.*:ALL,GRANT'
     state: present
+    login_user: root  # Add this
+    login_password: RoboShop@1  # Add this
   delegate_to: mysql-dev.ashishlavale5.online
 
 - name: Ensure MySQL is listening on all interfaces
