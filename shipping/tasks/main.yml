@@ -3,10 +3,36 @@
     name: common
     tasks_from: java
 
-- name: Install MySQL
+- name: Install MySQL Client
   ansible.builtin.dnf:
     name: mysql
     state: latest
+
+# 👉 ADD THIS SECTION HERE
+- name: Allow remote connections for MySQL root user from shipping server
+  community.mysql.mysql_user:
+    name: root
+    host: shipping.internal.cloudapp.net
+    password: RoboShop@1
+    priv: '*.*:ALL,GRANT'
+    state: present
+  delegate_to: mysql-dev.ashishlavale5.online
+
+- name: Ensure MySQL is listening on all interfaces
+  ansible.builtin.lineinfile:
+    path: /etc/my.cnf
+    regexp: '^bind-address'
+    line: 'bind-address = 0.0.0.0'
+  become: true
+  delegate_to: mysql-dev.ashishlavale5.online
+
+- name: Restart MySQL to apply config changes
+  ansible.builtin.service:
+    name: mysqld
+    state: restarted
+  become: true
+  delegate_to: mysql-dev.ashishlavale5.online
+# 👆 SECTION ENDS HERE
 
 - name: Load to DB
   ansible.builtin.shell: mysql -h mysql-dev.ashishlavale5.online -uroot -pRoboShop@1 < /app/db/{{ item }}.sql
